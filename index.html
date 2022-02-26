@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+	<link rel="shortcut icon" href="Assets/favicon.png" type="image/x-icon">
+
+	<title>Text Summarization</title>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h1 class="display-3 border-2 border-bottom mb-4 pt-3">Text Summarization</h1>
+
+		<p class="fw-light">Summarization is the task of condensing a piece of text to a shorter version, reducing the
+			size of the
+			initial text while at the same time preserving key informational elements and the meaning of content.
+			Since manual text summarization is a time expensive and generally laborious task, the automatization
+			of the task is gaining increasing popularity and therefore constitutes a strong motivation for
+			academic research.</p>
+
+		<div class="border-2 border-bottom mb-4 pt-3">
+			<h3>Finalized Approaches</h3>
+			<ul class="fw-light">
+				<li>BART (BERT + GPT-2)</li>
+				<li>LongFormer (Based on BART)</li>
+				<li>BigBird (Based on Pegasus)</li>
+				<li>GPT-2</li>
+			</ul>
+		</div>
+
+		<div class="border-2 border-bottom mb-4 pt-3">
+			<h3>All Approaches</h3>
+			<ul class="fw-light">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
+					<label>
+						Pegasus (BERT + GPT-2)
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked disabled>
+					<label>
+						BART (BERT + GPT-2)
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked disabled>
+					<label>
+						LongFormer (Based on BART)
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked disabled>
+					<label>
+						BigBird (Based on Pegasus)
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
+					<label>
+						BERT + (Decoder from Scratch)
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked disabled>
+					<label>
+						GPT-2
+					</label>
+				</div>
+			</ul>
+		</div>
+
+		<section id="pegasus-vs-bart" class="border-2 border-bottom mb-4 pt-3">
+			<h3>Pegasus vs BART</h3>
+			<p class="lead mb-5">Both uses almost same architechture. But, they are trained differently. <br>
+				They doesn't support longer sequences, Thier Sequence length limit is 512 for Pegaus & 1024 for BART.
+				<br>
+				Practically speaking, Inputs & Outputs of both models are pretty much same and are like <a
+					href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank">Orignal Transformer</a>.
+			</p>
+
+			<div class="grid">
+				<div class="row">
+					<div class="col"><img src="Assets/pegasus_archi.png" class="w-100"></div>
+					<div class="col"><img src="Assets/bart_archi.png" class="w-100"></div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<p class="fw-light">The base architecture of PEGASUS is a standard
+							Transformer encoder-decoder. Both GSG and MLM are
+							applied simultaneously to this example as pre-training objectives. Originally there are
+							three sentences.
+							One sentence
+							is masked with [MASK1] and used as target generation text
+							(GSG). The other two sentences remain in the input, but
+							some tokens are randomly masked by [MASK2] (MLM).</p>
+					</div>
+					<div class="col">
+						<p class="fw-light"> Inputs to the encoder need not be aligned with decoder outputs, allowing
+							arbitary noise
+							transformations. Here, a
+							document has been corrupted by replacing spans of text with mask symbols. The corrupted
+							document (left) is
+							encoded with
+							a bidirectional model, and then the likelihood of the original document (right) is
+							calculated with an
+							autoregressive decoder.
+							For fine-tuning, an uncorrupted document is input to both the encoder and decoder, and we
+							use
+							representations from the final
+							hidden state of the decoder.</p>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col text-center"><b class="fs-3">Pegasus</b></div>
+					<div class="col text-center"><b class="fs-3">BART</b></div>
+				</div>
+			</div>
+
+		</section>
+
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>LongFormer ED vs BigBird</h3>
+			<p class="h6"><strong>Note: </strong>RoBERTa is just a facebook version of google's BERT, This is many times
+				bigger than BERT and trained for a lot longer than BERT. But, the architecture still stays the same</p>
+			<p class="lead h6 mb-5">Being extra clear, Both of them have 2 versions of them. One version is for
+				only-enocder tasks (e.g sequence classification), Second version is for encoder-decoder tasks (e.g text
+				summarization) <br> <br>
+				LongFormer's only-encoder version is based on RoBERTa & LongFormer's encoder-decoder version is based on
+				BART <br>
+				BigBird's only-encoder version is also based on RoBERTa & BigBird's encoder-decoder version is based on
+				Pegasus <br>
+				Obviously, I'll be taking about encoder-decoder version of both (considering our main target) <br>
+				For architectural details see BART for LongFormer & Pegasus for BigBird
+			</p>
+
+			<div class="grid">
+				<div class="row">
+					<div class="col"><img src="Assets/longformer-attention-mask.png" class="w-100"></div>
+					<div class="col"><img src="Assets/bigbird-attention-mask.png" class="w-100"></div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<p class="fw-light">Comparing the full self-attention pattern and the configuration of attention
+							patterns in our Longformer. <br>
+							Unlike BigBird, LongFormer doesn't have any final version. Instead it has variants</p>
+					</div>
+					<div class="col">
+						<p class="fw-light">Building blocks of the attention mechanism used in BIGBIRD. White color
+							indicates absence
+							of attention. (a) random attention with r = 2, (b) sliding window attention with w = 3 (c)
+							global
+							attention with g = 2. (d) the combined BIGBIRD model.</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<ol>
+							<li>LongFormer's only-encoder version has a MaxSeq length of 4096</li>
+							<li>LongFormer's encoder-decoder version has a MaxSeq length of 16384</li>
+						</ol>
+					</div>
+					<div class="col">
+						<ol>
+							<li>BigBird's only-encoder version has a MaxSeq length of 4096</li>
+							<li>BigBird's encoder-decoder version has a MaxSeq length of 4069</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col text-center"><b class="fs-3">LongFormer Encoder Decoder</b></div>
+					<div class="col text-center"><b class="fs-3">BigBird</b></div>
+				</div>
+			</div>
+
+		</section>
+
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will Pegasus work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of Pegasus is 512, So they won't work here.</p>
+			<p class="lead"><strong>Answer: NO</strong></p>
+		</section>
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will BART work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of both BART is 1024, Average size of our sequences (in dataset) is 1000
+				(ranging from 500 to 1500)<br>
+				I think, It worth giving a try by truncating few hundred tokens from the end
+			</p>
+			<p class="lead"><strong>Answer: YES, (MayBe)</strong></p>
+		</section>
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will LongFormer ED (LED) work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of LED is 16384, Average size of our sequences (in dataset) is 1000
+				(ranging from 500 to 1500)<br>
+				I think, This will work for sure !
+			</p>
+			<p class="lead"><strong>Answer: YES</strong></p>
+		</section>
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will BigBird work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of BigBird is 4096, Average size of our sequences (in dataset) is 1000
+				(ranging from 500 to 1500)<br>
+				I think, This will work for sure !
+			</p>
+			<p class="lead"><strong>Answer: YES</strong></p>
+		</section>
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will RoBERTa (BERT) work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of both RoBERTa & BERT is 512, So they won't work directly. <br>
+				Even some models (e.g longformer [only-encoder], bigbird [only-encoder]) fix the SeqLen problem (by
+				customizing attention masks) but still remember these are just encoder-only model we'll still be needed
+				to Train a Decoder from scratch</p>
+			<p class="lead"><strong>Answer: NO</strong></p>
+		</section>
+		<section class="border-2 border-bottom mb-4 pt-3">
+			<h3>Will GPT-2 work here ?</h3>
+			<p class="lead mb-3">The MaxSeqLen of both GPT & GPT-2 is 512 & 1024 (respectivly), Average size of our
+				sequences (in dataset) is 1000 (ranging from 500 to 1500)<br>
+				I think, It worth giving a try by truncating few hundred tokens from the end
+			</p>
+			<p class="lead"><strong>Answer: YES, (MayBe)</strong></p>
+		</section>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

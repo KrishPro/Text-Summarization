@@ -7,3 +7,6 @@
 - LongFormer (Based on BART)
 - BigBird (Based on Pegasus)
 - GPT-2
+
+## Research
+Whole research, I did for this project is public [here](https://krishpro.github.io/text-summarization)
