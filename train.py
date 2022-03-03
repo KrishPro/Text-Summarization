@@ -10,14 +10,32 @@ import torch
 
 from model import Model
 
+# !pip install -q torchtext==0.10 torchaudio==0.9.0 torchvision==0.10.0 tf-estimator-nightly==2.8.0.dev2021122109 earthengine-api==0.1.238 folium==0.2.1
+# !pip install -q cloud-tpu-client==0.10 torch==1.9.0 https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.9-cp37-cp37m-linux_x86_64.whl
+# !pip install -q transformers pytorch_lightning datasets pyngrok
+
+# !wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz
+# !tar zxvf ngrok-stable-linux-amd64.tgz
+# !./ngrok authtoken 1y2MQMr0xLh05Dvbb0dABiNQpAY_3bqEfwwEtM7duDaqwrN93
+
+# drive.mount('/content/drive')
+
+# pwd = "/content/drive/MyDrive/Models/text-summarization/bart"
+
+# def start_tensorboard(log_dir: str):
+#     tb = program.TensorBoard()
+#     tb.configure(argv=[None, '--logdir', log_dir])
+#     url = tb.launch()
+#     print(f"Tensorflow listening on {url}")
+#     port = int(url.split(":")[-1][:-1])
+#     print(ngrok.connect(port))
+
 
 class CustomCrossEntropy(nn.Module):
     """
     CustomCrossEntropy Loss
-
     Due to torch_xla not working on pytorch=1.10, I had to down-grade to 1.9.
     But there is feat. added to CrossEntropy in 1.10, Called label_smothing
-
     I needed it, So i coded up a the feat. myself.
     Now, I'm neither using 1.10's CrossEntropy nor 1.9's CrossEntropy. I'm using mine
     """
@@ -40,11 +58,15 @@ class CustomCrossEntropy(nn.Module):
         #inputs.shape: (num_samples, num_classes)
         #targets.shape: (num_samples)
         num_classes = inputs.size(1)
+        inputs = inputs.log_softmax(axis=1)
         
         one_hot = F.one_hot(targets, num_classes=num_classes)
-        smoothed_labels = self.smooth_label(one_hot)
-        smoothed_labels = self.zero_pad_prob(smoothed_labels) if self.ignore_index else smoothed_labels
-        loss = F.cross_entropy(inputs, smoothed_labels, reduction="none")
+        with torch.no_grad():
+            smoothed_labels = self.smooth_label(one_hot)
+            smoothed_labels = self.zero_pad_prob(smoothed_labels) if self.ignore_index else smoothed_labels
+
+        loss = -torch.sum(smoothed_labels*inputs, axis=1)
+
         loss = loss[targets != self.ignore_index] if self.ignore_index else loss
         return torch.mean(loss)
 
@@ -88,6 +110,7 @@ class TrainModel(Model):
 
     def training_step(self, batch: tuple, batch_idx: int):
         loss, accu = self.forward_step(batch)
+        self.log("lr", self.lr_schedulers[0].get_lr(), prog_bar=True)
         self.log("loss", loss)
         self.log("accu", accu, prog_bar=True)
         return loss
