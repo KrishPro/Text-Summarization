@@ -10,8 +10,9 @@ import torch
 
 from model import Model
 
-# !pip install -q torchtext==0.10 torchaudio==0.9.0 torchvision==0.10.0 tf-estimator-nightly==2.8.0.dev2021122109 earthengine-api==0.1.238 folium==0.2.1
-# !pip install -q cloud-tpu-client==0.10 torch==1.9.0 https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.9-cp37-cp37m-linux_x86_64.whl
+# !pip install -q tf-estimator-nightly==2.8.0.dev2021122109 earthengine-api==0.1.238 folium==0.2.1
+# !pip install -q torchtext==0.11.0 torchaudio==0.10.0 torchvision==0.11.1 torch==1.10
+# !pip install -q cloud-tpu-client==0.10 https://storage.googleapis.com/tpu-pytorch/wheels/colab/1.10/torch_xla-1.10-cp37-cp37m-linux_x86_64.whl
 # !pip install -q transformers pytorch_lightning datasets pyngrok
 
 # !wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz
