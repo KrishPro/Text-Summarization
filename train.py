@@ -110,7 +110,7 @@ class TrainModel(Model):
 
     def training_step(self, batch: tuple, batch_idx: int):
         loss, accu = self.forward_step(batch)
-        self.log("lr", self.lr_schedulers[0].get_lr(), prog_bar=True)
+        self.log("lr", self.lr_schedulers().get_last_lr(), prog_bar=True)
         self.log("loss", loss)
         self.log("accu", accu, prog_bar=True)
         return loss
