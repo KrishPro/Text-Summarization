@@ -15,5 +15,7 @@ Which means it **can** support sequences about 1024 words long, But at a high co
 
 Free Google Colab **cannot** train BART for Text Summarization
 
+But still, I will consider this branch as in-complete and I will try use BART for text summarization later on
+
 ## Research
 Whole research, I did for this project is public [here](https://krishpro.github.io/text-summarization)
